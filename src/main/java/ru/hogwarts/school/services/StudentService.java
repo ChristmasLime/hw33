@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
@@ -15,9 +16,11 @@ import java.util.NoSuchElementException;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final FacultyRepository facultyRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
     }
 
     public Student createStud(Student student) {
@@ -50,12 +53,11 @@ public class StudentService {
         return studentRepository.findStudByAgeBetween(minAge, maxAge);
     }
 
-    public Faculty getFacultyByStudId(Long id) {
-        Student student = studentRepository.findStudentById(id);
-        if (student==null) {
-            throw new NoSuchElementException("Студента в факультете не существует");
-        }
-        return student.getFaculty();
+
+    public Collection<Student> getByFacultyId(Long id) {
+        return facultyRepository.findById(id)
+                .map(Faculty::getStudents)
+                .orElseThrow(NoSuchElementException::new);
     }
 
 

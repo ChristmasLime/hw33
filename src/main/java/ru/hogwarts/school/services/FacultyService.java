@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -11,47 +12,49 @@ import java.util.NoSuchElementException;
 @Service
 public class FacultyService {
 
-    private final FacultyRepository repository;
+    private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
-    public FacultyService(FacultyRepository repository) {
-        this.repository = repository;
+    public FacultyService(FacultyRepository facultyRepository, StudentRepository studentRepository) {
+        this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Faculty createFacul(Faculty faculty) {
-        return repository.save(faculty);
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFacul(Long id) {
-        return repository.findById(id)
+        return facultyRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     public Faculty editFacul(Faculty faculty) {
-        return repository.save(faculty);
+        return facultyRepository.save(faculty);
     }
 
     public void deleteFacul(Long id) {
-        repository.deleteById(id);
+        facultyRepository.deleteById(id);
     }
 
     public Collection<Faculty> getAllFacul() {
-        return repository.findAll();
+        return facultyRepository.findAll();
     }
 
     public Collection<Faculty> getFaculByColor(String color) {
-        return repository.getFacultiesByColor(color);
+        return facultyRepository.getFacultiesByColor(color);
     }
 
     public Collection<Faculty> getFacultyNameOrColor(String searchString) {
-        return repository.getFacultyByNameIgnoreCaseOrColorIgnoreCase(searchString, searchString);
+        return facultyRepository.getFacultyByNameIgnoreCaseOrColorIgnoreCase(searchString, searchString);
     }
 
-    public Collection<Student> getFacultyInStudent(Long id) {
-        Faculty faculty = repository.findFacultiesById(id);
-        if (faculty==null) {
-            throw new NoSuchElementException("Факультета с данный ID не сущестует");
-        }
-        return faculty.getStudents();
+    public Faculty getByStudentId(Long id) {
+        return studentRepository.findById(id)
+                .map(Student::getFaculty)
+                .orElseThrow(NoSuchElementException::new);
+
+
     }
 }
 

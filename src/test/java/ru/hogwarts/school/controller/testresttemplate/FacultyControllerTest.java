@@ -1,4 +1,4 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.school.controller.testresttemplate;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest(classes = HomeWork33Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FacultyControllerTestRestTemplate {
+public class FacultyControllerTest {
 
     public static final Faculty SLYTHERIN = new Faculty(null, "Slytherin", "Green");
     public static final Faculty RAVENCLAW = new Faculty(null, "RavenClaw", "Black");
