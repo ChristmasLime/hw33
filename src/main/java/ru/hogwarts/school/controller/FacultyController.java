@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("faculty")
+@RequestMapping("/faculty")
 public class FacultyController {
 
     private final FacultyService facultyService;
@@ -24,7 +24,7 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.createFacul(faculty));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Faculty> findFaculty(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.notFound().build();
@@ -40,7 +40,7 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.editFacul(faculty));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFacul(id);
         return ResponseEntity.ok().build();
@@ -67,9 +67,9 @@ public class FacultyController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("{id}/student")
-    public ResponseEntity<Collection<Student>> getStudentsByFacultyId(@PathVariable Long id) {
-        return ResponseEntity.ok(facultyService.getFacultyInStudent(id));
+    @GetMapping("/by-student")
+    public Faculty getStudentsByFacultyId(@RequestParam Long id) {
+        return facultyService.getByStudentId(id);
     }
 }
 

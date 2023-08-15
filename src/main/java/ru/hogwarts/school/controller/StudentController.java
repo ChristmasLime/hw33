@@ -65,7 +65,7 @@ public class StudentController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/age")
+    @GetMapping("/age-between")
     public ResponseEntity<Collection<Student>> getStudentsByAgeBetween(@RequestParam int minAge,
                                                                        @RequestParam int maxAge) {
         if (minAge > maxAge) {
@@ -74,9 +74,10 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentsAgeBetween(minAge, maxAge));
     }
 
-    @GetMapping("/{id}/faculty")
-    public ResponseEntity<Faculty> getStudentByFacultyId(@PathVariable Long id) {
-        return ResponseEntity.ok(studentService.getFacultyByStudId(id));
+
+    @GetMapping("/by-faculty")
+    public Collection<Student> getAllByFaculty(@RequestParam Long id) {
+        return studentService.getByFacultyId(id);
     }
 
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
